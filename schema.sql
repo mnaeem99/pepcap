@@ -53,6 +53,25 @@ CREATE TABLE e_commerce.users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE e_commerce.categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE e_commerce.products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT DEFAULT 0,
+    category_id INT REFERENCES e_commerce.categories(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE e_commerce.orders (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES e_commerce.users(id),
@@ -64,7 +83,7 @@ CREATE TABLE e_commerce.orders (
 CREATE TABLE e_commerce.order_items (
     id SERIAL PRIMARY KEY,
     order_id INT REFERENCES e_commerce.orders(id),
-    product_id INT REFERENCES admin_panel.products(id), -- Linking to Admin Panel Products
+    product_id INT REFERENCES e_commerce.products(id), -- Linking to Admin Panel Products
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL
 );
