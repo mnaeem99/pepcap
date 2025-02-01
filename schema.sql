@@ -96,10 +96,27 @@ CREATE TABLE inventory_management.suppliers (
     contact_info TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE inventory_management.categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+CREATE TABLE inventory_management.products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT DEFAULT 0,
+    category_id INT REFERENCES inventory_management.categories(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE inventory_management.inventory_transactions (
     id SERIAL PRIMARY KEY,
-    product_id INT REFERENCES admin_panel.products(id), -- Linking to Admin Panel Products
+    product_id INT REFERENCES inventory_management.products(id), -- Linking to Admin Panel Products
     quantity INT NOT NULL,
     transaction_type VARCHAR(50) NOT NULL, -- 'IN', 'OUT'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
