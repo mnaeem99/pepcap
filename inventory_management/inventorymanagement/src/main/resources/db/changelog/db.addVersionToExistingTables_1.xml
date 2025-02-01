@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+         
+		<changeSet author="pepcap, Inc" id="suppliers100">
+	    <preConditions onFail="MARK_RAN">
+        	<tableExists tableName="suppliers" schemaName="inventory_management"/>
+        </preConditions>
+	    <addColumn tableName="suppliers">
+	    	<column name="versiono" type="BIGINT" defaultValue="0">
+	      		<constraints nullable="false"/>
+			</column>
+	   	</addColumn>
+	</changeSet>
+	<changeSet author="pepcap, Inc" id="products101">
+	    <preConditions onFail="MARK_RAN">
+        	<tableExists tableName="products" schemaName="inventory_management"/>
+        </preConditions>
+	    <addColumn tableName="products">
+	    	<column name="versiono" type="BIGINT" defaultValue="0">
+	      		<constraints nullable="false"/>
+			</column>
+	   	</addColumn>
+	</changeSet>
+	<changeSet author="pepcap, Inc" id="categories102">
+	    <preConditions onFail="MARK_RAN">
+        	<tableExists tableName="categories" schemaName="inventory_management"/>
+        </preConditions>
+	    <addColumn tableName="categories">
+	    	<column name="versiono" type="BIGINT" defaultValue="0">
+	      		<constraints nullable="false"/>
+			</column>
+	   	</addColumn>
+	</changeSet>
+	<changeSet author="pepcap, Inc" id="inventory_transactions103">
+	    <preConditions onFail="MARK_RAN">
+        	<tableExists tableName="inventory_transactions" schemaName="inventory_management"/>
+        </preConditions>
+	    <addColumn tableName="inventory_transactions">
+	    	<column name="versiono" type="BIGINT" defaultValue="0">
+	      		<constraints nullable="false"/>
+			</column>
+	   	</addColumn>
+	</changeSet>
+         
+</databaseChangeLog>
