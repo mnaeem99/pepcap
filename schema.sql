@@ -134,14 +134,38 @@ CREATE TABLE task_management.projects (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE task_management.users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_email_confirmed BOOLEAN,
+    phone_number VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE task_management.tasks (
     id SERIAL PRIMARY KEY,
     project_id INT REFERENCES task_management.projects(id),
     name VARCHAR(100) NOT NULL,
     description TEXT,
-    assignee_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
+    assignee_id INT REFERENCES task_management.users(id), -- Linking to Admin Panel Users
     status VARCHAR(50) DEFAULT 'To Do', -- 'To Do', 'In Progress', 'Done'
     due_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE time_tracking.timesheets (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES task_management.users(id), -- Linking to Admin Panel Users
+    date DATE NOT NULL,
+    hours_worked DECIMAL(5, 2) NOT NULL,
+    task_id INT REFERENCES task_management.tasks(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -165,9 +189,24 @@ CREATE TABLE employee_management.attendance (
 
 CREATE SCHEMA feedback_system;
 
+CREATE TABLE feedback_system.users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_email_confirmed BOOLEAN,
+    phone_number VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE feedback_system.feedback (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
+    user_id INT REFERENCES feedback_system.users(id), -- Linking to Admin Panel Users
     message TEXT NOT NULL,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -175,9 +214,24 @@ CREATE TABLE feedback_system.feedback (
 
 CREATE SCHEMA ticketing_system;
 
+CREATE TABLE ticketing_system.users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_email_confirmed BOOLEAN,
+    phone_number VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE ticketing_system.tickets (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
+    user_id INT REFERENCES ticketing_system.users(id), -- Linking to Admin Panel Users
     subject VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     status VARCHAR(50) DEFAULT 'Open', -- 'Open', 'In Progress', 'Resolved', 'Closed'
@@ -193,31 +247,35 @@ CREATE TABLE analytics_dashboard.analytics (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE SCHEMA time_tracking;
-
-CREATE TABLE time_tracking.timesheets (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
-    date DATE NOT NULL,
-    hours_worked DECIMAL(5, 2) NOT NULL,
-    task_id INT REFERENCES task_management.tasks(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE SCHEMA event_management;
+
+CREATE TABLE event_management.users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_email_confirmed BOOLEAN,
+    phone_number VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE event_management.events (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
     location TEXT,
-    organizer_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
+    organizer_id INT REFERENCES event_management.users(id), -- Linking to Admin Panel Users
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE event_management.event_registrations (
     id SERIAL PRIMARY KEY,
     event_id INT REFERENCES event_management.events(id),
-    user_id INT REFERENCES admin_panel.users(id), -- Linking to Admin Panel Users
+    user_id INT REFERENCES event_management.users(id), -- Linking to Admin Panel Users
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
