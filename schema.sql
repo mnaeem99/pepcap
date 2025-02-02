@@ -160,7 +160,7 @@ CREATE TABLE task_management.tasks (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE time_tracking.timesheets (
+CREATE TABLE task_management.timesheets (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES task_management.users(id), -- Linking to Admin Panel Users
     date DATE NOT NULL,
